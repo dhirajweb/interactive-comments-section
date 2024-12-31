@@ -1,0 +1,23 @@
+.single_comment {
+  display: flex;
+  background-color: #fff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  list-style: none;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.comment_score {
+  display: flex;
+  flex-direction: column;
+}
+
+.single_comment header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.replies {
+  padding-left: 50px;
+  border-left: 2px solid #eaecf1;
+}
