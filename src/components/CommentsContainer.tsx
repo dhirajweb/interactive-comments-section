@@ -27,7 +27,7 @@ const CommentsContainer: FC = () => {
   return (
     <div className="container">
       <CommentsList commentsList={commentsList} />
-      <WriteComment />
+      <WriteComment actionBtnText="Send" actionType="send" />
     </div>
   );
 };

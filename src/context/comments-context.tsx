@@ -1,20 +1,30 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useReducer,
   useState,
   type ReactNode,
 } from 'react';
+import {
+  traverseDeleteComments,
+  traverseReplyToComments,
+  traverseUpdateComments,
+  traverseVoteComments,
+} from '../utils/traverseComments';
 
 type CommentsContextProviderProps = {
   children: ReactNode;
 };
+
+export type CommentsType = CommentType[];
 
 export type CommentType = {
   id: number;
   content: string;
   createdAt: string;
   score: number;
+  replyingTo?: string;
   user: {
     image: {
       png: string;
@@ -22,10 +32,8 @@ export type CommentType = {
     };
     username: string;
   };
-  replies: CommentType[] | [];
+  replies: CommentsType | [];
 };
-
-export type CommentsType = CommentType[];
 
 export type CurrentUserType = {
   image: {
@@ -41,8 +49,11 @@ type CommentsContextValue = {
   setInitialComments: (comments: CommentsType) => void;
   setCurrentUser: (user: CurrentUserType) => void;
   addComment: (comment: CommentType) => void;
-  updateComment: (commentId: number, comment: string) => void;
-  replyToComment: (commentId: number, reply: string) => void;
+  updateComment: (commentId: number, commentText: string) => void;
+  deleteComment: (commentId: number) => void;
+  replyToComment: (commentId: number, reply: CommentType) => void;
+  upvoteComment: (commentId: number) => void;
+  downvoteComment: (commentid: number) => void;
 };
 
 type AddCommentAction = {
@@ -52,18 +63,27 @@ type AddCommentAction = {
 
 type UpdateCommentAction = {
   type: 'UPDATE_COMMENT';
-  payload: {
-    commentId: number;
-    comment: string;
-  };
+  payload: CommentsType;
+};
+
+type DeleteCommentAction = {
+  type: 'DELETE_COMMENT';
+  payload: CommentsType;
 };
 
 type ReplyToCommentAction = {
   type: 'REPLY_TO_COMMENT';
-  payload: {
-    commentId: number;
-    reply: string;
-  };
+  payload: CommentsType;
+};
+
+type UpVoteCommentAction = {
+  type: 'UPVOTE_COMMENT';
+  payload: CommentsType;
+};
+
+type DownVoteCommentAction = {
+  type: 'DOWNVOTE_COMMENT';
+  payload: CommentsType;
 };
 
 type SetInitialCommentsAction = {
@@ -75,11 +95,10 @@ type CommentAction =
   | AddCommentAction
   | UpdateCommentAction
   | ReplyToCommentAction
-  | SetInitialCommentsAction;
-
-// type CommentsState = {
-//   commentsList: CommentsType;
-// };
+  | SetInitialCommentsAction
+  | DeleteCommentAction
+  | UpVoteCommentAction
+  | DownVoteCommentAction;
 
 const initialState: CommentsType = [];
 
@@ -89,6 +108,16 @@ function commentsReducer(state: CommentType[], action: CommentAction) {
       return action.payload;
     case 'ADD_COMMENT':
       return [...state, action.payload];
+    case 'UPDATE_COMMENT':
+      return action.payload;
+    case 'DELETE_COMMENT':
+      return action.payload;
+    case 'REPLY_TO_COMMENT':
+      return action.payload;
+    case 'UPVOTE_COMMENT':
+      return action.payload;
+    case 'DOWNVOTE_COMMENT':
+      return action.payload;
     default:
       return state;
   }
@@ -122,11 +151,50 @@ const CommentsContextProvider = ({
       setCurrentUser(user);
     },
     addComment: (comment) => {
-      console.log('Adding comment:', comment);
+      dispatch({ type: 'ADD_COMMENT', payload: comment });
     },
-    updateComment: () => {},
-    replyToComment: () => {},
+    updateComment: (commentId, commentText) => {
+      const updatedComments = traverseUpdateComments(
+        commentsList,
+        commentId,
+        commentText
+      );
+
+      dispatch({ type: 'UPDATE_COMMENT', payload: updatedComments });
+    },
+    deleteComment: (commentId) => {
+      const updatedComments = traverseDeleteComments(commentsList, commentId);
+      dispatch({ type: 'DELETE_COMMENT', payload: updatedComments });
+    },
+    replyToComment: (commentId, reply) => {
+      const updatedComments = traverseReplyToComments(
+        commentsList,
+        commentId,
+        reply
+      );
+      dispatch({ type: 'REPLY_TO_COMMENT', payload: updatedComments });
+    },
+    upvoteComment: (commentId) => {
+      const updatedComments = traverseVoteComments(
+        commentsList,
+        commentId,
+        'upvote'
+      );
+      dispatch({ type: 'UPVOTE_COMMENT', payload: updatedComments });
+    },
+    downvoteComment: (commentId) => {
+      const updatedComments = traverseVoteComments(
+        commentsList,
+        commentId,
+        'downvote'
+      );
+      dispatch({ type: 'DOWNVOTE_COMMENT', payload: updatedComments });
+    },
   };
+
+  useEffect(() => {
+    console.log(commentsList);
+  }, [commentsList]);
 
   return (
     <CommentsContext.Provider value={commentsContextValue}>

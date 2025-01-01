@@ -1,0 +1,7 @@
+export const ADD_COMMENT = 'ADD_COMMENT';
+
+export const UPDATE_COMMENT = 'UPDATE_COMMENT';
+
+export const SET_INITIAL_COMMENTS = 'SET_INITIAL_COMMENTS';
+
+export const REPLY_TO_COMMENT = 'REPLY_TO_COMMENT';
