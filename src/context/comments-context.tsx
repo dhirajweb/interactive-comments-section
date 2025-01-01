@@ -1,7 +1,6 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useReducer,
   useState,
   type ReactNode,
@@ -191,10 +190,6 @@ const CommentsContextProvider = ({
       dispatch({ type: 'DOWNVOTE_COMMENT', payload: updatedComments });
     },
   };
-
-  useEffect(() => {
-    console.log(commentsList);
-  }, [commentsList]);
 
   return (
     <CommentsContext.Provider value={commentsContextValue}>

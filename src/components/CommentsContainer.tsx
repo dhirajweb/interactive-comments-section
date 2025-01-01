@@ -25,7 +25,7 @@ const CommentsContainer: FC = () => {
   }, []);
 
   return (
-    <div className="container">
+    <div className="container p-5">
       <CommentsList commentsList={commentsList} />
       <WriteComment actionBtnText="Send" actionType="send" />
     </div>

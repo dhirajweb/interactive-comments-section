@@ -23,7 +23,7 @@ const Comment: FC<CommentProps> = ({ comment }) => {
 
   const commentContainerRef = useRef<WriteCommentHandle>(null);
 
-  const handleChangeEditText = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeEditText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEditText(e.target.value);
   };
 
@@ -38,7 +38,6 @@ const Comment: FC<CommentProps> = ({ comment }) => {
 
   const handleOnReply = () => {
     setIsReplying(true);
-    console.log(commentContainerRef);
   };
 
   useEffect(() => {
@@ -61,12 +60,16 @@ const Comment: FC<CommentProps> = ({ comment }) => {
         <div className={styles.comment_info}>
           <header>
             <div className={styles.comment_details}>
-              <img src={comment.user.image.webp} alt="user image" />
-              <span>{comment.user.username}</span>
-              <span>{comment.createdAt}</span>
+              <img
+                className={styles.profile_img}
+                src={comment.user.image.webp}
+                alt="user image"
+              />
+              <span className={styles.username}>{comment.user.username}</span>
+              <span className={styles.createdAt}>{comment.createdAt}</span>
             </div>
             {currentUser?.username !== comment.user.username && (
-              <button onClick={handleOnReply}>
+              <button className={styles.reply_btn} onClick={handleOnReply}>
                 {' '}
                 <img src="/images/icon-reply.svg" alt="reply button" />
                 Reply
@@ -74,23 +77,34 @@ const Comment: FC<CommentProps> = ({ comment }) => {
             )}
 
             {currentUser?.username === comment.user.username && (
-              <div>
-                <button
-                  disabled={isEdit}
-                  onClick={() => deleteComment(comment.id)}
-                >
-                  Delete
-                </button>
-                <button onClick={() => setIsEdit(true)} disabled={isEdit}>
-                  Edit
-                </button>
+              <div className={styles.comment_actions_container}>
+                <div>
+                  <img src="/images/icon-delete.svg" alt="delete icon" />
+                  <button
+                    disabled={isEdit}
+                    onClick={() => deleteComment(comment.id)}
+                    className={styles.delete_btn}
+                  >
+                    Delete
+                  </button>
+                </div>
+                <div>
+                  <img src="/images/icon-edit.svg" alt="edit icon" />
+                  <button
+                    className={styles.edit_btn}
+                    onClick={() => setIsEdit(true)}
+                    disabled={isEdit}
+                  >
+                    Edit
+                  </button>
+                </div>
               </div>
             )}
           </header>
           <div className={styles.comment_text}>
             {isEdit ? (
-              <input
-                type="text"
+              <textarea
+                rows={3}
                 value={editText}
                 onChange={handleChangeEditText}
               />

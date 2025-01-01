@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useCommentsContext } from '../context/comments-context';
 import Button from './common/Button';
+import styles from '../styles/WriteComment.module.css';
 
 type SendProps = {
   actionType: 'send';
@@ -34,17 +35,18 @@ const WriteComment = forwardRef<WriteCommentHandle, WriteCommentProps>(
       actionType === 'reply' ? `@${(props as ReplyProps).replyingTo} ` : ''
     );
 
-    const handleChangeCommentText = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleChangeCommentText = (
+      event: ChangeEvent<HTMLTextAreaElement>
+    ) => {
       setCommentText(event.target.value);
     };
 
-    const inputRef = useRef<HTMLInputElement | null>(null);
+    const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
     useImperativeHandle(
       ref,
       () => ({
         inputFocus() {
-          console.log('focusing...');
           inputRef.current?.focus();
         },
       }),
@@ -79,15 +81,23 @@ const WriteComment = forwardRef<WriteCommentHandle, WriteCommentProps>(
     };
 
     return (
-      <form onSubmit={handleSubmit}>
-        <img src={currentUser?.image.webp} alt="user image" />
-        <input
-          type="text"
-          ref={inputRef}
-          value={commentText}
-          onChange={(e) => handleChangeCommentText(e)}
-          placeholder="Add a comment..."
+      <form className={styles.write_comment_container} onSubmit={handleSubmit}>
+        <img
+          className={styles.profile_img}
+          src={currentUser?.image.webp}
+          alt="user image"
         />
+        <div className={styles.input_container}>
+          <textarea
+            cols={12}
+            rows={3}
+            ref={inputRef}
+            value={commentText}
+            onChange={(e) => handleChangeCommentText(e)}
+            placeholder="Add a comment..."
+          />
+        </div>
+
         <Button type="submit">{actionBtnText}</Button>
       </form>
     );

@@ -1,0 +1,29 @@
+.write_comment_container {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  margin: 10px 0;
+}
+
+.write_comment_container .profile_img {
+  width: 40px;
+  height: 40px;
+}
+
+.write_comment_container .input_container {
+  flex-grow: 1;
+}
+
+.write_comment_container textarea {
+  width: 100%;
+  border: 1px solid #5457b6;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.write_comment_container textarea:focus-visible {
+  outline: 1px solid #5457b6;
+}

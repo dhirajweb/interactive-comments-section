@@ -1,0 +1,13 @@
+.action_btn {
+  border: none;
+  height: 50px;
+  width: max-content;
+  flex-grow: 0;
+  padding: 5px 30px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  background-color: #5457b6;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}

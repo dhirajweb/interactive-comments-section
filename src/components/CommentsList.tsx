@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import Comment from './Comment';
 import { CommentsType } from '../context/comments-context';
+import styles from '../styles/CommentsList.module.css';
 
 type CommentsListProps = {
   commentsList: CommentsType;
@@ -8,7 +9,7 @@ type CommentsListProps = {
 
 const CommentsList: FC<CommentsListProps> = ({ commentsList }) => {
   return (
-    <ul>
+    <ul className={styles.comment_list}>
       {commentsList.map((comment) => {
         return <Comment key={comment.id} comment={comment} />;
       })}
