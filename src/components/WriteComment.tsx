@@ -34,11 +34,13 @@ const WriteComment = forwardRef<WriteCommentHandle, WriteCommentProps>(
     const [commentText, setCommentText] = useState<string>(
       actionType === 'reply' ? `@${(props as ReplyProps).replyingTo} ` : ''
     );
+    const [error, setError] = useState('');
 
     const handleChangeCommentText = (
       event: ChangeEvent<HTMLTextAreaElement>
     ) => {
       setCommentText(event.target.value);
+      setError('');
     };
 
     const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -55,29 +57,33 @@ const WriteComment = forwardRef<WriteCommentHandle, WriteCommentProps>(
 
     const handleSubmit = (e: FormEvent) => {
       e.preventDefault();
-      if (actionType === 'send') {
-        addComment({
-          user: currentUser!,
-          createdAt: new Date().getTime().toString(),
-          id: new Date().getTime(),
-          content: commentText,
-          score: 0,
-          replies: [],
-        });
-      } else if (actionType === 'reply') {
-        replyToComment((props as ReplyProps).commentId, {
-          user: currentUser!,
-          createdAt: new Date().getTime().toString(),
-          id: new Date().getTime(),
-          content: commentText,
-          score: 0,
-          replyingTo: (props as ReplyProps).replyingTo,
-          replies: [],
-        });
-        (props as ReplyProps).closeReplyBox();
-      }
+      if (commentText.trim().length === 0) {
+        setError('Please write a comment');
+      } else {
+        if (actionType === 'send') {
+          addComment({
+            user: currentUser!,
+            createdAt: new Date().getTime().toString(),
+            id: new Date().getTime(),
+            content: commentText,
+            score: 0,
+            replies: [],
+          });
+        } else if (actionType === 'reply') {
+          replyToComment((props as ReplyProps).commentId, {
+            user: currentUser!,
+            createdAt: new Date().getTime().toString(),
+            id: new Date().getTime(),
+            content: commentText,
+            score: 0,
+            replyingTo: (props as ReplyProps).replyingTo,
+            replies: [],
+          });
+          (props as ReplyProps).closeReplyBox();
+        }
 
-      setCommentText('');
+        setCommentText('');
+      }
     };
 
     return (
@@ -95,7 +101,9 @@ const WriteComment = forwardRef<WriteCommentHandle, WriteCommentProps>(
             value={commentText}
             onChange={(e) => handleChangeCommentText(e)}
             placeholder="Add a comment..."
+            className={`${error ? `${styles.error_outline}` : ''}`}
           />
+          {error && <p className={styles.error}>{error}</p>}
         </div>
 
         <Button type="submit">{actionBtnText}</Button>

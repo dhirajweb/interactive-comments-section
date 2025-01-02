@@ -1,1 +1,5 @@
-
+.comment_list_shimmer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

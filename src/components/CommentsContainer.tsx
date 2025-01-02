@@ -2,6 +2,7 @@ import { FC, useEffect } from 'react';
 import { useCommentsContext } from '../context/comments-context';
 import CommentsList from './CommentsList';
 import WriteComment from './WriteComment';
+import styles from '../styles/CommentsContainer.module.css';
 
 const CommentsContainer: FC = () => {
   const { commentsList, setInitialComments, setCurrentUser } =
@@ -25,7 +26,7 @@ const CommentsContainer: FC = () => {
   }, []);
 
   return (
-    <div className="container p-5">
+    <div className={`container ${styles.comments_container}`}>
       <CommentsList commentsList={commentsList} />
       <WriteComment actionBtnText="Send" actionType="send" />
     </div>

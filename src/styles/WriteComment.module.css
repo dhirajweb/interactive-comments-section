@@ -27,3 +27,19 @@
 .write_comment_container textarea:focus-visible {
   outline: 1px solid #5457b6;
 }
+
+.error_outline,
+.write_comment_container .error_outline:focus-visible {
+  outline: 1px solid #c15155;
+  border: 1px solid #c15155 !important;
+}
+
+.error {
+  color: #c15155;
+}
+
+@media only screen and (max-width: 576px) {
+  .write_comment_container {
+    flex-direction: column;
+  }
+}

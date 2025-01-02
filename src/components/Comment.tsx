@@ -4,6 +4,7 @@ import CommentsList from './CommentsList';
 import styles from '../styles/Comment.module.css';
 import Button from './common/Button';
 import WriteComment, { WriteCommentHandle } from './WriteComment';
+import { timeSince } from '../utils/timeSince';
 
 type CommentProps = {
   comment: CommentType;
@@ -20,16 +21,22 @@ const Comment: FC<CommentProps> = ({ comment }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [editText, setEditText] = useState<string>(comment.content);
   const [isReplying, setIsReplying] = useState(false);
+  const [error, setError] = useState('');
 
   const commentContainerRef = useRef<WriteCommentHandle>(null);
 
   const handleChangeEditText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEditText(e.target.value);
+    setError('');
   };
 
   const handleUpdateText = () => {
-    updateComment(comment.id, editText);
-    setIsEdit(false);
+    if (editText.trim().length === 0) {
+      setError('Please write a comment');
+    } else {
+      updateComment(comment.id, editText);
+      setIsEdit(false);
+    }
   };
 
   const handleCloseReplyBox = () => {
@@ -66,7 +73,12 @@ const Comment: FC<CommentProps> = ({ comment }) => {
                 alt="user image"
               />
               <span className={styles.username}>{comment.user.username}</span>
-              <span className={styles.createdAt}>{comment.createdAt}</span>
+              {currentUser?.username === comment.user.username && (
+                <span className={styles.self_tag}>you</span>
+              )}
+              <span className={styles.createdAt}>
+                {timeSince(parseInt(comment.createdAt))}
+              </span>
             </div>
             {currentUser?.username !== comment.user.username && (
               <button className={styles.reply_btn} onClick={handleOnReply}>
@@ -103,16 +115,20 @@ const Comment: FC<CommentProps> = ({ comment }) => {
           </header>
           <div className={styles.comment_text}>
             {isEdit ? (
-              <textarea
-                rows={3}
-                value={editText}
-                onChange={handleChangeEditText}
-              />
+              <>
+                <textarea
+                  rows={3}
+                  value={editText}
+                  onChange={handleChangeEditText}
+                  className={`${error ? `${styles.error_outline}` : ''}`}
+                />
+              </>
             ) : (
               <p>{comment.content}</p>
             )}
             {isEdit && <Button onClick={handleUpdateText}>Update</Button>}
           </div>
+          {error && <p className={styles.error}>{error}</p>}
         </div>
       </li>
       {isReplying && (
@@ -126,11 +142,11 @@ const Comment: FC<CommentProps> = ({ comment }) => {
         />
       )}
       {comment?.replies?.length > 0 && (
-        <div className={styles.replies}>
+        <li className={styles.replies}>
           <div className={styles.reply}>
             <CommentsList commentsList={comment.replies} />
           </div>
-        </div>
+        </li>
       )}
     </>
   );

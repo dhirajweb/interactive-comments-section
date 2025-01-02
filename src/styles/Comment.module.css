@@ -1,5 +1,6 @@
 .single_comment {
   display: flex;
+  position: relative;
   background-color: #fff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   list-style: none;
@@ -44,6 +45,7 @@
 }
 
 .replies {
+  list-style: none;
   padding-left: 50px;
   border-left: 2px solid #eaecf1;
 }
@@ -70,7 +72,7 @@
 }
 
 .comment_info .createdAt {
-  color: #67727e;
+  color: #515963;
   font-size: 12px;
 }
 
@@ -92,10 +94,13 @@
 
 .comment_info .comment_text {
   padding: 15px 0;
-  color: #67727e;
+  color: #515963;
 }
 
 .reply_btn {
+  position: absolute;
+  top: 30px;
+  right: 20px;
   background: none;
   border: none;
   display: flex;
@@ -107,6 +112,9 @@
 }
 
 .comment_actions_container {
+  position: absolute;
+  top: 30px;
+  right: 20px;
   flex-grow: 0;
   display: flex;
   gap: 20px;
@@ -129,9 +137,91 @@
 }
 
 .comment_actions_container .delete_btn {
-  color: #ed6468;
+  color: #c15155;
 }
 
 .comment_actions_container .edit_btn {
   color: #5457b6;
+}
+
+.self_tag {
+  background-color: #5457b6;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.error_outline,
+.error_outline:focus-visible {
+  outline: 1px solid #c15155;
+  border: 1px solid #c15155 !important;
+}
+
+.error {
+  color: #c15155;
+}
+
+@media only screen and (max-width: 991px) {
+  .comment_actions_container {
+    font-size: 10px;
+    top: 37px;
+  }
+
+  .comment_actions_container img {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .replies {
+    padding-left: 20px;
+  }
+
+  .single_comment {
+    flex-direction: column-reverse;
+  }
+
+  .comment_score {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90px;
+    margin: 0 20px;
+    height: 50px;
+    gap: 10px;
+    padding: 0 10px;
+  }
+
+  .reply_btn {
+    top: unset;
+    bottom: 20px;
+    height: 50px;
+  }
+
+  .comment_actions_container {
+    top: unset;
+    bottom: 30px;
+    font-size: 16px;
+  }
+
+  .comment_info header .profile_img {
+    width: 30px;
+  }
+
+  .comment_info .username {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .replies {
+    padding-left: 5px;
+  }
+
+  .replies ul {
+    padding-left: 10px;
+  }
 }

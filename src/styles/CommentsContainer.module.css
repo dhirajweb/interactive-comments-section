@@ -1,0 +1,19 @@
+.comments_container {
+  padding: 20px 0;
+}
+
+@media only screen and(max-width: 991px) {
+  .comments_container .comment_actions_container {
+    font-size: 10px;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .comments_container {
+    padding: 10px;
+  }
+
+  .comments_container > ul {
+    padding: 0;
+  }
+}
