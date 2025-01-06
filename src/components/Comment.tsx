@@ -22,6 +22,9 @@ const Comment: FC<CommentProps> = ({ comment }) => {
   const [editText, setEditText] = useState<string>(comment.content);
   const [isReplying, setIsReplying] = useState(false);
   const [error, setError] = useState('');
+  const [createdAtText, setCreatedAtText] = useState<string>(
+    timeSince(parseInt(comment.createdAt))
+  );
 
   const commentContainerRef = useRef<WriteCommentHandle>(null);
 
@@ -51,6 +54,14 @@ const Comment: FC<CommentProps> = ({ comment }) => {
     if (isReplying) commentContainerRef.current?.inputFocus();
   }, [isReplying]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCreatedAtText(timeSince(parseInt(comment.createdAt)));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [comment.createdAt]);
+
   return (
     <>
       {' '}
@@ -76,9 +87,7 @@ const Comment: FC<CommentProps> = ({ comment }) => {
               {currentUser?.username === comment.user.username && (
                 <span className={styles.self_tag}>you</span>
               )}
-              <span className={styles.createdAt}>
-                {timeSince(parseInt(comment.createdAt))}
-              </span>
+              <span className={styles.createdAt}>{createdAtText}</span>
             </div>
             {currentUser?.username !== comment.user.username && (
               <button className={styles.reply_btn} onClick={handleOnReply}>
